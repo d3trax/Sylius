@@ -20,6 +20,7 @@ before_script:
     - sudo sed -i -e "s,/var/www,$(pwd)/web,g" /etc/apache2/sites-available/default
     - export MINK_EXTENSION_PARAMS='base_url=http://localhost:8000/app_test.php'
     - sudo /etc/init.d/apache2 restart
+    - php -i | grep memory
     - composer self-update
     - composer require doctrine/mongodb-odm="1.0.*@dev" --no-update
     - composer install --prefer-source --no-interaction

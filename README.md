@@ -1,4 +1,4 @@
-Sylius [![Build status...](https://secure.travis-ci.org/Sylius/Sylius.png?branch=master)](http://travis-ci.org/Sylius/Sylius) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Sylius/Sylius/badges/quality-score.png?s=f6d89b8aad6e15cab61134e7c0544ee1313f7f31)](https://scrutinizer-ci.com/g/Sylius/Sylius/)
+Sylius [![Build Status](https://travis-ci.org/d3trax/Sylius.png?branch=master)](https://travis-ci.org/d3trax/Sylius) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/d3trax/Sylius/badges/quality-score.png?s=3bf64a3cb492cd13d60f9d084f5288e5ee014ee4)](https://scrutinizer-ci.com/g/d3trax/Sylius/) [![Code Coverage](https://scrutinizer-ci.com/g/d3trax/Sylius/badges/coverage.png?s=1e43f339332ba6baa53f7b2312e7589ca5b5051a)](https://scrutinizer-ci.com/g/d3trax/Sylius/)
 ======
 
 Sylius is an open source e-commerce solution for **PHP**, based on the [**Symfony2**](http://symfony.com) framework.
