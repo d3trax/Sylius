@@ -61,7 +61,8 @@
         "behat/mink-selenium2-driver":       "*",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "fzaninotto/faker":                  "1.2.*",
-        "phpspec/phpspec":                   "2.0.*@dev"
+        "phpspec/phpspec":                   "2.0.*@dev",
+        "phpunit/phpunit": "3.7.28"
     },
     "scripts": {
         "post-install-cmd": [
