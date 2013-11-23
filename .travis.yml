@@ -15,19 +15,19 @@ before_script:
     - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
     - ulimit -n 10000
+    - curl -sS https://getcomposer.org/installer | php
     - sudo apt-get update
     - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl wkhtmltopdf
     - sudo sed -i -e "s,/var/www,$(pwd)/web,g" /etc/apache2/sites-available/default
     - export MINK_EXTENSION_PARAMS='base_url=http://localhost:8000/app_test.php'
     - sudo /etc/init.d/apache2 restart
-    - php -i | grep memory
-    - composer self-update
-    - composer require doctrine/mongodb-odm="1.0.*@dev" --no-update
-    - composer install --prefer-source --no-interaction
-    - composer update doctrine/mongodb-odm
+    - php -d memory_limit=2048M composer.phar self-update
+    - php -d memory_limit=2048M composer.phar require doctrine/mongodb-odm="1.0.*@dev" --no-update
+    - php -d memory_limit=2048M composer.phar install --prefer-source --no-interaction
+    - php -d memory_limit=2048M composer.phar update doctrine/mongodb-odm
     - app/console doctrine:database:create --env=test > /dev/null
     - app/console doctrine:schema:create --env=test > /dev/null
-    - app/console cache:warmup --env=test > /dev/null
+    - php -d memory_limit=2048M app/console cache:warmup --env=test > /dev/null
     - sh -e /etc/init.d/xvfb start
     - export DISPLAY=:99
     - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.35.0.jar
@@ -72,5 +72,5 @@ script:
     - cd ../VariableProductBundle; ../../../../bin/phpspec run -fpretty --verbose
 
 notifications:
-  email: "travis-ci@sylius.org"
-  irc:   "irc.freenode.org#sylius-dev"
+  email: "d3trax@gmail.com"
+  irc:   "irc.freenode.org#wiodadf"
