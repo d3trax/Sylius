@@ -81,3 +81,19 @@ payum:
                 Sylius\Bundle\PaymentsBundle\Model\Payment:
                     doctrine:
                         driver: orm
+
+        webtopay:
+            evp:
+                api:
+                    options:
+                        project_id: %evpPayment.credentials.project_id%
+                        sign_password:  %evpPayment.credentials.sign_password%
+                        sandbox: true
+
+            storages:
+                Sylius\Bundle\CoreBundle\Model\Order:
+                    doctrine:
+                        driver: orm
+                Sylius\Bundle\PaymentsBundle\Model\Payment:
+                    doctrine:
+                        driver: orm

@@ -76,6 +76,7 @@ sylius_payments:
         dummy: Test
         stripe: Stripe
         be2bill: Be2Bill
+        webtopay: webtopay
 
 sylius_payum: ~
 

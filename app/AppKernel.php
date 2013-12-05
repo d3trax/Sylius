@@ -28,6 +28,10 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+            //Platform bundles.
+
+//            new AR\Bundle\EvpPaymentBundle\WebToPayEvpPaymentBundle(),
+
             // Sylius bundles.
             new Sylius\Bundle\InstallerBundle\SyliusInstallerBundle(),
             new Sylius\Bundle\OrderBundle\SyliusOrderBundle(),
@@ -74,10 +78,12 @@ class AppKernel extends Kernel
             new JMS\TranslationBundle\JMSTranslationBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Payum\Bundle\PayumBundle\PayumBundle(),
+            new AR\Bundle\WebToPayPayumBundle\WebToPayBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev'))) {
             $bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
         return $bundles;
@@ -109,9 +115,9 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
 
-        if (is_file($file = __DIR__.'/config/config_'.$this->getEnvironment().'.local.yml')) {
+        if (is_file($file = __DIR__ . '/config/config_' . $this->getEnvironment() . '.local.yml')) {
             $loader->load($file);
         }
     }

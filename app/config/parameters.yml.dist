@@ -31,6 +31,10 @@ parameters:
     be2bill.password: EDITME
     be2bill.sandbox: true
 
+    evpPayment.credentials.project_id: 123
+    evpPayment.credentials.sign_password: 123
+    evpPayment.credentials.sandbox: true
+
     sylius.oauth.amazon.clientid:       <amazon_client_id>
     sylius.oauth.amazon.clientsecret:   <amazon_client_secret>
     sylius.oauth.facebook.clientid:     <facebook_client_id>
