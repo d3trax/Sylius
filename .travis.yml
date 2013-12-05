@@ -73,4 +73,3 @@ script:
 
 notifications:
   email: "d3trax@gmail.com"
-  irc:   "irc.freenode.org#wiodadf"

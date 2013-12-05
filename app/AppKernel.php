@@ -74,6 +74,8 @@ class AppKernel extends Kernel
             new JMS\TranslationBundle\JMSTranslationBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Payum\Bundle\PayumBundle\PayumBundle(),
+
+            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
             new AR\Bundle\WebToPayPayumBundle\WebToPayBundle(),
         );
 

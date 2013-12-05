@@ -150,3 +150,13 @@ knp_snappy:
         enabled:    true
         binary:     /usr/bin/wkhtmltoimage
         options:    []
+
+doctrine_mongodb:
+    connections:
+        default:
+            server: %mongodb.database.dsn%
+            options: {}
+    default_database: %mongodb.database.name%
+    document_managers:
+        default:
+            auto_mapping: true
