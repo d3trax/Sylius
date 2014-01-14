@@ -79,10 +79,11 @@ class AppKernel extends Kernel
             new AR\Bundle\WebToPayPayumBundle\WebToPayBundle(),
         );
 
-        if (in_array($this->environment, array('dev'))) {
-            $bundles[] = new \Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+        if ('dev' === $this->environment) {
+            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
         }
+
+        $bundles = $this->addFixturesBundle($bundles);
 
         return $bundles;
     }
@@ -125,7 +126,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        if (isset($_SERVER['VAGRANT']) && in_array($this->environment, array('dev', 'test')) && is_dir('/dev/shm')) {
+        if ($this->isVagrantEnvironment()) {
             return '/dev/shm/sylius/cache/'.$this->environment;
         }
 
@@ -137,10 +138,33 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        if (isset($_SERVER['VAGRANT']) && in_array($this->environment, array('dev', 'test')) && is_dir('/dev/shm')) {
+        if ($this->isVagrantEnvironment()) {
             return '/dev/shm/sylius/logs';
         }
 
         return parent::getLogDir();
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isVagrantEnvironment()
+    {
+        return (getenv('HOME') === '/home/vagrant' || getenv('VAGRANT') === 'VAGRANT') && is_dir('/dev/shm');
+    }
+
+    /**
+     * @param array $bundles
+     * @param array $environments
+     *
+     * @return array
+     */
+    private function addFixturesBundle(array $bundles, array $environments = array('dev', 'test'))
+    {
+        if (in_array($this->environment, $environments) && class_exists('Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle')) {
+            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
+        }
+
+        return $bundles;
     }
 }

@@ -42,5 +42,7 @@ parameters:
     sylius.oauth.google.clientid:       <google_client_id>
     sylius.oauth.google.clientsecret:   <google_client_secret>
 
+    sylius.inventory.backorders_enabled: true
+
     mongodb.database.dsn: mongodb://localhost:27017
     mongodb.database.name: sylius

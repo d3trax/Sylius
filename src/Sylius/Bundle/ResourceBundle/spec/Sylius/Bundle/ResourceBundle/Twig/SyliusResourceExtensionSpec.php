@@ -15,13 +15,12 @@ use Pagerfanta\Pagerfanta;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Sylius resource extension for Twig spec.
@@ -31,7 +30,7 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class SyliusResourceExtensionSpec extends ObjectBehavior
 {
-    function let(Container $container, Router $router, TwigEngine $templating)
+    function let(ContainerInterface $container, RouterInterface $router, TwigEngine $templating)
     {
         $container->get('router')->willReturn($router);
         $container->get('templating')->willReturn($templating);
@@ -64,9 +63,9 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
         $this->getFunctions()->shouldHaveCount(2);
     }
 
-    function it_should_render_a_sorting_link(Request $request, GetResponseEvent $event, Router $router, TwigEngine $templating)
+    function it_should_render_a_sorting_link(Request $request, GetResponseEvent $event, RouterInterface $router, TwigEngine $templating)
     {
-        $request->get('sorting', array())->willReturn(array());
+        $request->get('sorting')->willReturn(array());
 
         $event = $this->getGetResponseEvent($request, $event);
 
@@ -89,9 +88,9 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
         $this->renderSortingLink('propertyName', 'fieldName');
     }
 
-    function it_should_render_a_sorting_desc_link(Request $request, GetResponseEvent $event, Router $router, TwigEngine $templating)
+    function it_should_render_a_sorting_desc_link(Request $request, GetResponseEvent $event, RouterInterface $router, TwigEngine $templating)
     {
-        $request->get('sorting', array())->willReturn(array('propertyName' => 'asc'));
+        $request->get('sorting')->willReturn(array('propertyName' => 'asc'));
 
         $event = $this->getGetResponseEvent($request, $event);
 
@@ -114,16 +113,41 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
         $this->renderSortingLink('propertyName', 'fieldName');
     }
 
-    function it_should_render_a_sorting_link_with_custom_options(Request $request, GetResponseEvent $event, Router $router, TwigEngine $templating)
+    function it_should_render_a_sorting_asc_link(Request $request, GetResponseEvent $event, RouterInterface $router, TwigEngine $templating)
     {
-        $request->get('sorting', array())->willReturn(array());
+        $request->get('sorting')->willReturn(array());
+
+        $event = $this->getGetResponseEvent($request, $event);
+
+        $router->generate(
+            'route_name',
+            array('sorting' => array('otherName' => 'asc'))
+        )->shouldBeCalled()->willReturn('?sorting[otherName]=asc');
+
+        $templating->render(
+            'SyliusResourceBundle:Twig:sorting.html.twig',
+            array(
+                'url' => '?sorting[otherName]=asc',
+                'label' => 'fieldName',
+                'icon' => false,
+                'currentOrder' => null,
+            )
+        )->shouldBeCalled();
+
+        $this->fetchRequest($event);
+        $this->renderSortingLink('otherName', 'fieldName');
+    }
+
+    function it_should_render_a_sorting_link_with_custom_options(Request $request, GetResponseEvent $event, RouterInterface $router, TwigEngine $templating)
+    {
+        $request->get('sorting')->willReturn(array('propertyName' => 'asc'));
 
         $event = $this->getGetResponseEvent($request, $event);
 
         $router->generate(
             'new_route',
             array(
-                'sorting' => array('propertyName' => 'asc'),
+                'sorting' => array('propertyName' => 'desc'),
                 'params' => 'value',
             )
         )->shouldBeCalled()->willReturn('?sorting[propertyName]=asc&params=value');
@@ -133,8 +157,8 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
             array(
                 'url' => '?sorting[propertyName]=asc&params=value',
                 'label' => 'fieldName',
-                'icon' => false,
-                'currentOrder' => null,
+                'icon' => true,
+                'currentOrder' => 'asc',
             )
         )->shouldBeCalled();
 
@@ -148,7 +172,7 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
 
     function it_should_not_render_sorting_link(Request $request, GetResponseEvent $event)
     {
-        $request->get('sorting', array())->willReturn(array());
+        $request->get('sorting')->willReturn(array());
 
         $event = $this->getGetResponseEvent(
             $request,
@@ -161,7 +185,7 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
         $this->renderSortingLink('propertyName', 'fieldName')->shouldReturn('fieldName');
     }
 
-    function it_should_render_a_paginate_select(Request $request, GetResponseEvent $event, Pagerfanta $paginator, Router $router, TwigEngine $templating)
+    function it_should_render_a_paginate_select(Request $request, GetResponseEvent $event, Pagerfanta $paginator, RouterInterface $router, TwigEngine $templating)
     {
         $limits = array(10, 20);
 
@@ -201,7 +225,7 @@ class SyliusResourceExtensionSpec extends ObjectBehavior
         $this->renderPaginateSelect($paginator, array(10,20));
     }
 
-    function it_should_render_a_paginate_select_with_custom_options(Request $request, GetResponseEvent $event, Pagerfanta $paginator, Router $router, TwigEngine $templating)
+    function it_should_render_a_paginate_select_with_custom_options(Request $request, GetResponseEvent $event, Pagerfanta $paginator, RouterInterface $router, TwigEngine $templating)
     {
         $limits = array(10, 20);
 

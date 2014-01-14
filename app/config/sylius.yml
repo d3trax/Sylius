@@ -64,7 +64,7 @@ sylius_shipping:
 sylius_promotions: ~
 
 sylius_inventory:
-    backorders: true
+    backorders: %sylius.inventory.backorders_enabled%
     classes:
         unit:
             model: Sylius\Bundle\CoreBundle\Model\InventoryUnit
@@ -107,3 +107,8 @@ sylius_resource:
             driver: doctrine/orm
             classes:
                 model: Sylius\Bundle\CoreBundle\Model\Group
+        sylius.locale:
+            driver: doctrine/orm
+            classes:
+                model: Sylius\Bundle\CoreBundle\Model\Locale
+                controller: Sylius\Bundle\ResourceBundle\Controller\ResourceController
