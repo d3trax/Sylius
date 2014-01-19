@@ -49,6 +49,7 @@
 
         "payum/payum":                          "0.7.*@dev",
         "payum/payum-bundle":                   "0.7.*@dev",
+        "omnipay/omnipay":                      "1.0.*",
 
         "webtopay/libwebtopay": "1.6.x-dev",
         "jmikola/geojson": "1.0.*@dev",

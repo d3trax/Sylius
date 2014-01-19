@@ -2,7 +2,7 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Request;
 
-use Payum\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelRequest;
 
 class PaymentDetailsUpdate extends BaseModelRequest
 {

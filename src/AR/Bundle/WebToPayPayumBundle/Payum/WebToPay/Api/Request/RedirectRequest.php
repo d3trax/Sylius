@@ -2,8 +2,8 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request;
 
-use Payum\Exception\InvalidArgumentException;
-use Payum\Request\BaseModelRequest;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Request\BaseModelRequest;
 use Sylius\Bundle\CoreBundle\Model\OrderInterface;
 
 class RedirectRequest extends BaseModelRequest
@@ -22,7 +22,7 @@ class RedirectRequest extends BaseModelRequest
 
     /**
      * @param OrderInterface $model
-     * @throws \Payum\Exception\InvalidArgumentException
+     * @throws \Payum\Core\Exception\InvalidArgumentException
      */
     public function setModel($model)
     {

@@ -3,7 +3,7 @@
 namespace AR\Bundle\WebToPayPayumBundle\DependencyInjection\Factory\Payment;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
-use Payum\Exception\RuntimeException;
+use Payum\Core\Exception\RuntimeException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -3,7 +3,7 @@
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay;
 
 
-class Api extends \WebToPay
+class Api extends \WebToPay_Factory
 {
 
 } 

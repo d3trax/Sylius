@@ -6,9 +6,9 @@ namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Model\PaymentStatusModel;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\CheckOrderRequest;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\UpdatePaymentStatus;
-use Payum\Bridge\Spl\ArrayObject;
-use Payum\Exception\LogicException;
-use Payum\Exception\RequestNotSupportedException;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 
 class CheckOrderAction extends BaseApiAwareAction
 {
@@ -26,8 +26,8 @@ class CheckOrderAction extends BaseApiAwareAction
     /**
      * @param mixed $request
      *
-     * @throws \Payum\Exception\RequestNotSupportedException if the action dose not support the request.
-     * @throws \Payum\Exception\LogicException
+     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
+     * @throws \Payum\Core\Exception\LogicException
      * @return void
      */
     function execute($request)

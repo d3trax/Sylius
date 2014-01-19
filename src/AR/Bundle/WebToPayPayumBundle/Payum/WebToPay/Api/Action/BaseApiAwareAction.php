@@ -4,8 +4,8 @@ namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action;
 
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\UnsupportedApiException;
-use Payum\Action\ActionInterface;
-use Payum\ApiAwareInterface;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 

@@ -2,7 +2,7 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request;
 
-use Payum\Request\BaseModelRequest;
+use Payum\Core\Request\BaseModelRequest;
 
 class CheckOrderRequest extends BaseModelRequest
 {

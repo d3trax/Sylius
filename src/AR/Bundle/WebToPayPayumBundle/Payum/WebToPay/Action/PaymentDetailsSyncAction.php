@@ -3,9 +3,9 @@
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action;
 
 
-use Payum\Action\PaymentAwareAction;
-use Payum\Exception\RequestNotSupportedException;
-use Payum\Request\SyncRequest;
+use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\SyncRequest;
 
 class PaymentDetailsSyncAction extends PaymentAwareAction
 {
@@ -13,7 +13,7 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
     /**
      * @param mixed $request
      *
-     * @throws \Payum\Exception\RequestNotSupportedException if the action dose not support the request.
+     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
      *
      * @return void
      */

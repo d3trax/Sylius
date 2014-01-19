@@ -4,9 +4,9 @@ namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay;
 
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\CaptureOrderAction;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\OrderStatusAction;
-use Payum\Action\ExecuteSameRequestWithModelDetailsAction;
-use Payum\Extension\EndlessCycleDetectorExtension;
-use Payum\Payment;
+use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Payment;
 
 abstract class PaymentFactory
 {
