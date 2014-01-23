@@ -3,9 +3,9 @@
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request;
 
 
-use Payum\Core\Request\BaseModelRequest;
+use Payum\Core\Request\SyncRequest;
 
-class UpdatePaymentStatus extends BaseModelRequest
+class UpdatePaymentStatus extends SyncRequest
 {
 
 } 

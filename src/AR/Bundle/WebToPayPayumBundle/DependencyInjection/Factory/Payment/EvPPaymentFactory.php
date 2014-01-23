@@ -16,6 +16,25 @@ use Symfony\Component\DependencyInjection\Reference;
 class EvPPaymentFactory extends AbstractPaymentFactory
 {
 
+    protected function getApiActions()
+    {
+        return array(
+            'check_order',
+            'redirect_payment'
+        );
+    }
+
+    protected function getBasicActions()
+    {
+        return array(
+            'payment_details_capture',
+            'autopay_payment_details_status',
+            'payment_details_sync',
+            'redirect',
+            'status',
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -73,18 +92,6 @@ class EvPPaymentFactory extends AbstractPaymentFactory
         $factoryDefinitionId = 'payum.context.' . $contextName . '.payment.factory';
         $container->setDefinition($factoryDefinitionId, $factoryDefinition);
 
-//        $validatorDefinition = new DefinitionDecorator('payum.webtopay.payment.callback_validator.prototype');
-//        $validatorDefinition->setFactoryService(new Reference($factoryDefinitionId));
-//        $validatorDefinition->setPublic(false);
-//        $validatorDefinitionId = 'payum.context.'.$contextName.'.payment.callback_validator';
-//        $container->setDefinition($validatorDefinitionId, $validatorDefinition);
-//
-//        $builderDefinition = new DefinitionDecorator('payum.webtopay.payment.request_builder.prototype');
-//        $builderDefinition->setFactoryService(new Reference($factoryDefinitionId));
-//        $builderDefinition->setPublic(false);
-//        $builderDefinitionId = 'payum.context.'.$contextName.'.payment.request_builder';
-//        $container->setDefinition($builderDefinitionId, $builderDefinition);
-
         $paymentDefinition->addMethodCall('addApi', array(new Reference($factoryDefinitionId)));
     }
 
@@ -93,21 +100,27 @@ class EvPPaymentFactory extends AbstractPaymentFactory
      */
     protected function addActions(Definition $paymentDefinition, ContainerBuilder $container, $contextName, array $config)
     {
+        $this->addBasicActions($this->getBasicActions(), $contextName, $container, $paymentDefinition);
+        $this->addApiActions($this->getApiActions(), $contextName, $container, $paymentDefinition);
+    }
 
-        $paymentDetailsCaptureActionDefinition = new DefinitionDecorator('payum.webtopay.action.payment_details_capture.prototype');
-        $paymentDetailsCaptureActionId = 'payum.context.' . $contextName . '.action.capture';
+    protected function addBasicActions(array $actionsList, $contextName, ContainerBuilder $container, Definition $paymentDefinition)
+    {
+        foreach ($actionsList as $actionName) {
+            $paymentDetailsCaptureActionDefinition = new DefinitionDecorator('payum.webtopay.action.' . $actionName . '.prototype');
+            $paymentDetailsCaptureActionId = 'payum.context.' . $contextName . '.action.' . $actionName;
+            $container->setDefinition($paymentDetailsCaptureActionId, $paymentDetailsCaptureActionDefinition);
+            $paymentDefinition->addMethodCall('addAction', array(new Reference($paymentDetailsCaptureActionId)));
+        }
+    }
 
-        $container->setDefinition($paymentDetailsCaptureActionId, $paymentDetailsCaptureActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($paymentDetailsCaptureActionId)));
-
-        $autoPayPaymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.webtopay.action.autopay_payment_details_status.prototype');
-        $autoPayPaymentDetailsStatusActionId = 'payum.context.' . $contextName . '.action.status';
-        $container->setDefinition($autoPayPaymentDetailsStatusActionId, $autoPayPaymentDetailsStatusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayPaymentDetailsStatusActionId)));
-
-        $autoPayPaymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.webtopay.action.api.redirect.prototype');
-        $autoPayPaymentDetailsStatusActionId = 'payum.context.' . $contextName . '.action.api.redirect';
-        $container->setDefinition($autoPayPaymentDetailsStatusActionId, $autoPayPaymentDetailsStatusActionDefinition);
-        $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayPaymentDetailsStatusActionId)));
+    protected function addApiActions(array $actionsList, $contextName, ContainerBuilder $container, Definition $paymentDefinition)
+    {
+        foreach ($actionsList as $actionName) {
+            $autoPayPaymentDetailsStatusActionDefinition = new DefinitionDecorator('payum.webtopay.action.api.' . $actionName . '.prototype');
+            $autoPayPaymentDetailsStatusActionId = 'payum.context.' . $contextName . '.action.api.' . $actionName;
+            $container->setDefinition($autoPayPaymentDetailsStatusActionId, $autoPayPaymentDetailsStatusActionDefinition);
+            $paymentDefinition->addMethodCall('addAction', array(new Reference($autoPayPaymentDetailsStatusActionId)));
+        }
     }
 } 

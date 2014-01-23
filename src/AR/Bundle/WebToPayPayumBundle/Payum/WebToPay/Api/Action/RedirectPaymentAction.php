@@ -2,8 +2,8 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action;
 
-use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Model\RequestModel;
 use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\RedirectRequest;
+use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\UpdatePaymentStatus;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
@@ -25,28 +25,12 @@ class RedirectPaymentAction extends BaseApiAwareAction
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $requestModel = $request->getModel();
-
-        $billingAddress = $requestModel->getUser()->getBillingAddress();
-
-        $model = new RequestModel();
-        $model->setAmount($request->getModel()->getPayment()->getAmount());
-        $model->setCurrency($request->getModel()->getPayment()->getCurrency());
-        if ($billingAddress) {
-            $model->setCountry($billingAddress->getCountry()->getIsoName());
-        }
-        $model->setOrderid($requestModel->getIdentifier());
-
-        $model->setCallbackurl($request->getCallbackUrl());
-        $model->setAccepturl($request->getCallbackUrl());
-        $model->setCancelurl($request->getCallbackUrl());
-
-        $model->setTest(in_array('ROLE_SYLIUS_ADMIN', $request->getModel()->getUser()->getRoles()));
+        $model = $request->getModel();
 
         try {
-            $url = $this->getApi()->getRequestBuilder()->buildRequestUrlFromData($model->asArray());
-            $this->execute(new RedirectUrlInteractiveRequest($url));
-            return;
+            $model['REDIRECT_URL'] = $this->getApi()->getRequestBuilder()->buildRequestUrlFromData($model);;
+            $this->execute(new UpdatePaymentStatus($model));
+            throw new RedirectUrlInteractiveRequest($model['REDIRECT_URL']);
         } catch (\WebToPay_Exception_Validation $e) {
             throw new LogicException($e->getMessage(), $e->getCode(), $e);
         }

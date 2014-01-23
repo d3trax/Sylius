@@ -2,13 +2,11 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action;
 
-//use Payum\Request\CaptureRequest;
-use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\RedirectRequest;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\SecuredCaptureRequest;
 use Sylius\Bundle\CoreBundle\Model\OrderInterface;
-use Sylius\Bundle\OrderBundle\Model\Order;
+use Sylius\Bundle\PaymentsBundle\Model\PaymentInterface;
 
 class CaptureOrderAction extends PaymentAwareAction
 {
@@ -19,7 +17,6 @@ class CaptureOrderAction extends PaymentAwareAction
     public function execute($request)
     {
 
-//        /** @var $request CaptureRequest */
         /** @var $request SecuredCaptureRequest */
         if (!$this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
@@ -27,16 +24,47 @@ class CaptureOrderAction extends PaymentAwareAction
 
         /** @var OrderInterface $order */
         $order = $request->getModel();
+        $payment = $order->getPayment();
 
-        $paymentDetails = $order->getPayment()->getDetails();
+        $details = $payment->getDetails();
+        $billingAddress = $order->getBillingAddress() ? $order->getBillingAddress() : $order->getUser()->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress() ? $order->getShippingAddress() : $order->getUser()->getShippingAddress();
+        $address = ($billingAddress ? $billingAddress :
+            ($shippingAddress ? $shippingAddress : null)
+        );
 
-        if (empty($paymentDetails)) {
-            $this->payment->execute(new RedirectRequest($order, $request->getToken()->getTargetUrl()));
-
-            $order->getPayment()->setDetails(array(
-                'status' => true,
+        if (null == $address || true) {
+            $order->setState(PaymentInterface::STATE_FAILED);
+            $payment->setDetails(array(
+                'RESULT' => StatusAction::STATUS_REJECTED
             ));
+            $request->setModel($order);
+            $this->payment->execute($request);
             return;
+        }
+
+        if (empty($details)) {
+            $details = array(
+                'orderid' => $order->getNumber(),
+                'amount' => number_format($order->getTotal() / 100, 2),
+                'currency' => $order->getCurrency(),
+                'country' => $address->getCountry()->getIsoName(),
+                'accepturl' => $request->getToken()->getTargetUrl(),
+                'cancelurl' => $request->getToken()->getTargetUrl(),
+                'callbackurl' => $request->getToken()->getAfterUrl(),
+            );
+        }
+
+        $payment->setDetails($details);
+
+        try {
+            $request->setModel($payment);
+            $this->payment->execute($request);
+            $request->setModel($order);
+        } catch (\Exception $e) {
+            $request->setModel($order);
+
+            throw $e;
         }
     }
 
@@ -47,6 +75,7 @@ class CaptureOrderAction extends PaymentAwareAction
     {
         return
             $request instanceof SecuredCaptureRequest &&
-            $request->getModel() instanceof Order;
+            $request->getModel() instanceof OrderInterface
+            ;
     }
 }

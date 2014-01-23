@@ -2,10 +2,10 @@
 
 namespace AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action;
 
-
+use AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Request\UpdatePaymentStatus;
 use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\SyncRequest;
 
 class PaymentDetailsSyncAction extends PaymentAwareAction
 {
@@ -19,10 +19,13 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
      */
     function execute($request)
     {
-        /** @var $request SyncRequest */
+        /** @var $request UpdatePaymentStatus */
         if (false == $this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $model->replace($model);
     }
 
     /**
@@ -33,6 +36,8 @@ class PaymentDetailsSyncAction extends PaymentAwareAction
     function supports($request)
     {
         return
-            $request instanceof SyncRequest;
+            $request instanceof UpdatePaymentStatus &&
+            $request->getModel() instanceof \ArrayAccess
+            ;
     }
 }

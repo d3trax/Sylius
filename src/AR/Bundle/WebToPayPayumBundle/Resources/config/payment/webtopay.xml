@@ -1,63 +1,57 @@
 <?xml version="1.0" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-
         <parameter key="payum.webtopay.action.payment_details_capture.class">
             AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\CaptureOrderAction
+        </parameter>
+        <parameter key="payum.webtopay.action.payment_details_sync.class">
+            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\PaymentDetailsSyncAction
+        </parameter>
+        <parameter key="payum.webtopay.action.redirect.class">
+            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\RedirectAction
+        </parameter>
+        <parameter key="payum.webtopay.action.status.class">
+            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\StatusAction
         </parameter>
         <parameter key="payum.webtopay.action.autopay_payment_details_status.class">
             AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Action\OrderStatusAction
         </parameter>
-        <parameter key="payum.webtopay.payment.factory.class">AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api
+        <!-- Factory -->
+        <parameter key="payum.webtopay.payment.factory.class">
+            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api
         </parameter>
-        <parameter key="payum.webtopay.action.api.redirect.prototype.class">
+        <!-- Api -->
+        <parameter key="payum.webtopay.action.api.redirect_payment.prototype.class">
             AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action\RedirectPaymentAction
         </parameter>
-        <parameter key="payum.webtopay.action.api.redirect.prototype.class">
-            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action\RedirectPaymentAction
+        <parameter key="payum.webtopay.action.api.check_order.prototype.class">
+            AR\Bundle\WebToPayPayumBundle\Payum\WebToPay\Api\Action\CheckOrderAction
         </parameter>
-
-        <!--<parameter key="payum.webtopay.api.class">WebToPay_Factory</parameter>-->
-        <!--<parameter key="payum.webtopay.payment.client.class">WebToPay</parameter>-->
-        <!--<parameter key="payum.webtopay.payment.callback_validator.class">WebToPay_CallbackValidator</parameter>-->
-        <!--<parameter key="payum.webtopay.payment.request_builder.class">WebToPay_RequestBuilder</parameter>-->
     </parameters>
-
     <services>
-
-        <!-- webToPay -->
         <!-- Factory -->
         <service id="payum.webtopay.payment.factory.prototype" class="%payum.webtopay.payment.factory.class%"
                  public="false" abstract="true">
             <argument type="collection">
             </argument>
         </service>
-
-
-        <!-- Callback validator service -->
-        <!--<service id="payum.webtopay.payment.callback_validator.prototype" class="%payum.webtopay.payment.callback_validator.class%"-->
-        <!--factory-service="" factory-method="getCallbackValidator" public="false" abstract="true"/>-->
-
-        <!--Request builder service -->
-        <!--<service id="payum.webtopay.payment.request_builder.prototype" class="%payum.webtopay.payment.request_builder.class%"-->
-        <!--factory-service="" factory-method="getRequestBuilder" public="false" abstract="true"/>-->
-
-        <!-- Client service -->
-        <!--<service id="payum.webtopay.payment.client" class="%payum.webtopay.payment.client.class%" public="false"/>-->
-
-
         <!-- Action definitions -->
         <service id="payum.webtopay.action.payment_details_capture.prototype"
                  class="%payum.webtopay.action.payment_details_capture.class%" public="false"/>
         <service id="payum.webtopay.action.autopay_payment_details_status.prototype"
                  class="%payum.webtopay.action.autopay_payment_details_status.class%" public="false"/>
+        <service id="payum.webtopay.action.payment_details_sync.prototype"
+                 class="%payum.webtopay.action.payment_details_sync.class%" public="false"/>
+        <service id="payum.webtopay.action.redirect.prototype"
+                 class="%payum.webtopay.action.redirect.class%" public="false"/>
+        <service id="payum.webtopay.action.status.prototype"
+                 class="%payum.webtopay.action.status.class%" public="false"/>
         <!-- API Actions -->
-        <service id="payum.webtopay.action.api.redirect.prototype"
-                 class="%payum.webtopay.action.api.redirect.prototype.class%" public="false" abstract="true"/>
-        <service id="payum.webtopay.action.api.redirect.prototype"
-                 class="%payum.webtopay.action.api.redirect.prototype.class%" public="false" abstract="true"/>
+        <service id="payum.webtopay.action.api.check_order.prototype"
+                 class="%payum.webtopay.action.api.check_order.prototype.class%" public="false" abstract="true"/>
+        <service id="payum.webtopay.action.api.redirect_payment.prototype"
+                 class="%payum.webtopay.action.api.redirect_payment.prototype.class%" public="false" abstract="true"/>
     </services>
 </container>
